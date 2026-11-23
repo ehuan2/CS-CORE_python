@@ -39,6 +39,8 @@ def CSCORE_IRLS(X, seq_depth, post_process=True):
     """
     n_cell = X.shape[0]
     n_gene = X.shape[1]
+    # float: integer seq_depth**4 overflows int64 for typical depths
+    seq_depth = np.asarray(seq_depth, dtype=float)
     seq_depth_sq = np.power(seq_depth, 2)
     seq_2 = np.sum(seq_depth_sq)
     seq_4 = np.sum(np.power(seq_depth_sq, 2))
