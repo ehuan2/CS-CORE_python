@@ -5,7 +5,7 @@ setup(
     version='1.0.0',
     author='Chang Su',
     author_email='chang.su@emory.edu',
-    url='https://github.com/ChangSuBiostats/CS-CORE_python',
+    url='git@github.com:ehuan2/CS-CORE_python.git',
     license='MIT',
     packages=['CSCORE'],
     description='A Python package for cell-type-specific co-expression inference from single cell RNA-sequencing data',
