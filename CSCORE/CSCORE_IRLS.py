@@ -56,13 +56,13 @@ def CSCORE_IRLS(X, seq_depth, post_process=True):
     sigma2 = np.dot(seq_depth_sq, (np.power(X_centered, 2) - M)) / seq_4
     theta = np.power(mu, 2) / sigma2
     j = 0
-    delta = np.Inf
+    delta = np.inf
 
     # IRLS for estimating mu and sigma_jj
     while delta > 0.05 and j <= 10:
         theta_previous = theta
         theta_median = np.median(theta[theta > 0])
-        theta[theta < 0] = np.Inf
+        theta[theta < 0] = np.inf
         w = M + np.outer(seq_depth_sq, np.power(mu, 2) / theta_median)
         w[w <= 0] = 1
         mu = np.dot(seq_depth, X / w) / np.dot(seq_depth_sq, 1 / w)
@@ -83,7 +83,7 @@ def CSCORE_IRLS(X, seq_depth, post_process=True):
 
     # Weighted least squares for estimating sigma_jj'
     theta_median = np.median(theta[theta > 0])
-    theta[theta < 0] = np.Inf
+    theta[theta < 0] = np.inf
     w = M + np.outer(seq_depth_sq, np.power(mu, 2) / theta_median)
     w[w <= 0] = 1
 
@@ -107,7 +107,7 @@ def CSCORE_IRLS(X, seq_depth, post_process=True):
     sigma2[neg_inds] = 1
     sigma = np.sqrt(sigma2)
     est = covar / np.outer(sigma, sigma)
-    est[neg_inds, neg_inds] = np.Inf
+    est[neg_inds, neg_inds] = np.inf
 
     # Post-process the co-expression estimates
     if post_process:
@@ -119,7 +119,7 @@ def CSCORE_IRLS(X, seq_depth, post_process=True):
 def post_process_est(est):
     p = est.shape[0]
     # Post-process CS-CORE estimates
-    neg_gene_inds = (np.diag(est) == np.Inf)
+    neg_gene_inds = (np.diag(est) == np.inf)
     if np.any(neg_gene_inds):
         print(
             '%i among %i genes have negative variance estimates. Their co-expressions with other genes were set to 0.' %
@@ -169,7 +169,7 @@ def CSCORE(adata, gene_index, seq_depth = None):
         Lowly expressed genes are too sparse for co-expression estimation.')
     # evaluate sequencing depths
     if seq_depth is None:
-        seq_depth = adata.raw.X.sum(axis = 1).A1
+        seq_depth = np.asarray(adata.raw.X.sum(axis = 1)).ravel()
     else:
         if len(seq_depth) != adata.raw.X.shape[0]:
             raise ValueError('The length of sequencing depths does not match the dimension of the count matrix.')
